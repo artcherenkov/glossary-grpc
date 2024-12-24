@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package glossary;
+
+import "google/protobuf/empty.proto";
+
+// Описание термина
+message Term {
+  string key = 1;
+  string description = 2;
+}
+
+// Запрос для создания или обновления
+message CreateOrUpdateTermRequest {
+  Term term = 1;
+}
+
+// Ответ при создании/обновлении/чтении
+message TermResponse {
+  Term term = 1;
+}
+
+// Запрос для запроса термина по ключу
+message TermKeyRequest {
+  string key = 1;
+}
+
+// Ответ со списком терминов
+message TermsListResponse {
+  repeated Term terms = 1;
+}
+
+// Сервис
+service GlossaryService {
+  // Создать термин
+  rpc CreateTerm (CreateOrUpdateTermRequest) returns (TermResponse);
+
+  // Получить термин
+  rpc GetTerm (TermKeyRequest) returns (TermResponse);
+
+  // Обновить термин
+  rpc UpdateTerm (CreateOrUpdateTermRequest) returns (TermResponse);
+
+  // Удалить термин
+  rpc DeleteTerm (TermKeyRequest) returns (google.protobuf.Empty);
+
+  // Получить список всех терминов
+  rpc ListTerms (google.protobuf.Empty) returns (TermsListResponse);
+}
